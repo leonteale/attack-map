@@ -141,6 +141,8 @@
     max-height: 400px;
     overflow-y: auto;
     display: block;
+    padding: 12px 14px;
+    line-height: 1.4;
   }
 </style>
 
@@ -453,26 +455,33 @@ function about() {
     });
 
     // stats panel
+    function getTopFormatted(title, data, color) {
+      if (!data || data.length === 0) return `${title}: <span style="color: gray">None</span>`;
+      const [item, count] = data[0];
+      return `<span style="color: white"><b>${title}:</b></span> <span style="color: ${color}">${item}</span> <span style="color: gray">(${count})</span>`;
+    }
+    
     function updateStatsPanel() {
-  fetch('stats.json')
-    .then(res => res.json())
-    .then(data => {
-      const getTop = arr => (arr.length > 0 ? `${arr[0][0]}: ${arr[0][1]}` : 'None');
-
-      const html = `
-        <strong>Attack Stats</strong><br/>
-        <u>All-time Top</u><br/>
-        <b>Country:</b><br/>${getTop(data.allTime.country)}<br/>
-        <b>IP:</b><br/>${getTop(data.allTime.ip)}<br/>
-        <b>Service:</b><br/>${getTop(data.allTime.service)}<br/><hr>
-        <u>Today Top</u><br/>
-        <b>Country:</b><br/>${getTop(data.today.country)}<br/>
-        <b>IP:</b><br/>${getTop(data.today.ip)}<br/>
-        <b>Service:</b><br/>${getTop(data.today.service)}
-      `;
-      document.getElementById('statsPanel').innerHTML = html;
-    });
-}
+      fetch('stats.json')
+        .then(res => res.json())
+        .then(data => {
+          const html = `
+            <div style="margin-bottom: 8px;">
+              <span style="color: white; font-weight: bold;">All-time Top</span><br/>
+              ${getTopFormatted('Country', data.allTime.country, 'yellow')}<br/>
+              ${getTopFormatted('IP', data.allTime.ip, 'cyan')}<br/>
+              ${getTopFormatted('Service', data.allTime.service, 'red')}
+            </div>
+            <div>
+              <span style="color: white; font-weight: bold;">Today Top</span><br/>
+              ${getTopFormatted('Country', data.today.country, 'yellow')}<br/>
+              ${getTopFormatted('IP', data.today.ip, 'cyan')}<br/>
+              ${getTopFormatted('Service', data.today.service, 'red')}
+            </div>
+          `;
+          document.getElementById('statsPanel').innerHTML = html;
+        });
+  }
 
     window.onload = () => {
       setInterval(updateStatsPanel, 10_000);
