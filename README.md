@@ -1,64 +1,75 @@
-### IPew Attack Map
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+# Attack Map
 
-![img](pewpew.png)
+A live, real-time visualisation of cyber attack traffic, showing source and destination locations across the globe. This project is ideal for showcasing honeypot data, WebSocket-based intrusion attempts, or as a dramatic centrepiece on a security operations centre display.
 
-(a collaborative effort by @alexcpsec & @hrbrmstr)
+## ?? Features
 
-Why should security vendors be the only ones allowed to use silly, animated visualizations to "compensate"? Now, **you** can have your very own IP attack map that's just as useful as everyone else's.
+- Real-time WebSocket-based attack visualisation
+- World map with animated arcs between source and destination
+- Popup notifications per attack
+- Modular logging system (`log.txt`) to track and analyse data
+- Easily extensible backend to support various services (SSH, FTP, Apache, etc.)
 
-IPew is a feature-rich, customizable D3 / javascript visualization, needing nothing more than a web server capable of serving static content and a sense of humor to operate. It's got all the standard features that are expected including:
+## ??? Installation
 
-- _Scary_ dark background!
-- Source & destination country actor/victim attribution!
-- Inane attack names!
+1. Clone this repository:
 
-BUT, it has one critical element that is missing from the others: **SOUND EFFECTS**! What good is a global cyberbattle without some _cool_ sounds.
+   ```bash
+   git clone git@github.com:leonteale/attack-map.git
+   cd attack-map
+   ```
 
-In all seriousness, IPew provides a simple framework - based on [Datamaps](http://datamaps.github.io/) - for displaying cartographic attack data in a (mostly) responsive way and shows how to use dynamic data via javascript event timers and data queues (in case you're here to learn vs have fun - or both!).
+2. Install dependencies:
 
-You can customize the display through a myriad of query string options, including _sounds_.
+   ```bash
+   npm install
+   ```
 
-IPew includes the following sounds:
+3. (Optional but recommended) Ignore `node_modules` in version control:
 
-- no sound option set - Star Wars blaster! (guess which one!)
-- `tng=1` - Star Trek:TNG Photons!
-- `wargames=1` - WarGames key clicks!
-- `b5=1` - Babylon 5 defense grid cannons!
-- `pew=1` - Somewhat disturbing human-made "pew-pew" sound
-- `galaga=1` - Classic arcade sound!
-- `asteroids=1` - ASTEROIDS!
-- `china=1` - Trump saying "China!"
-- `timallen=1` - Tim Allen's AUUUGH?!
+   ```bash
+   echo "node_modules/" >> .gitignore
+   ```
 
-To turn off sound effects (but, but, _why?_ :-), use `nofx=1`, and to randomly cycle through them all use `allfx=1`
+## ?? Usage
 
-By default, IPew will use a statistical model for choosing source countries for the attacks, but you can level the playing field and set `random_mode=1` to give all countries the same cyber-advatage.
+Run the server in the background:
 
-In similar vein, and using the perpsective many prominent security vendors and pundits seem to have, you can make all cyber attacks come from China with `china_mode=1` or from North Korea with `dprk_mode=1`.
+```bash
+sudo node main.js &
+```
 
+Or run it normally for debugging:
 
-IPew's default attack timing is based on observational data from many sources, but you can make it look like the world is on the brink of cyber collapse by setting `bad_day=1`.
+```bash
+sudo node main.js
+```
 
-Finally, you can proudly display your organization's name by setting `org_name=MyOrgName` (URL encode any spaces or special characters).
+This will start the backend which listens for incoming WebSocket messages and updates the front-end visualisation in real time.
 
-### Drill Mode
+## ?? Directory Structure
 
-We had an interesting request to be able to use IPew in a IR "drill" setting, so there's now a "drill mode" where you can specify a latitude &amp; longitude to be the destination for the attacks. Right now, all attacks go there, but we may add an option to specify a percentage of attacks that should go there. You _must_ use `drill_mode=1&lat=##.####&lon=##.####` for this to work, like: `drill_mode=1&lat=43.2672&lon=-70.8617` (which would focus all attacks near @hrbrmstr). Remember, you can specify your organization name there, too. [Here's an example](http://ocularwarfare.com/index.html?org_name=hrbrmstr&drill_mode=1&lat=43.2672&lon=-70.8617).
+```
+attackmap/
++-- main.js             # Main Node.js backend server
++-- log.txt             # Attack log file (auto-generated)
++-- public/             # Static front-end assets (map, CSS, client JS)
++-- routes/             # Backend WebSocket handlers
++-- .gitignore          # Git exclusions
++-- package.json        # Project metadata and dependencies
+```
 
-One of my personal favorites is [http://ocularwarfare.com/index.html?china_mode=1&org_name=Mandiant&bad_day=1](http://ocularwarfare.com/index.html?china_mode=1&org_name=Mandiant&bad_day=1).
+## ?? Notes
 
-### Blame former employee mode
+- Attack data should be sent to the WebSocket endpoint in the expected format (IP, service, etc.).
+- You can build your own logging modules, or feed it from external honeypot logs or fail2ban triggers.
 
-If you want to show that former employees are the problem, try out
-employee_mode. You can set a first and last name for the employee and also
-set a latitude and longitude.
-[http://ocularwarfare.com/index.html?org_name=Verizon&employee_mode=1&employee_fname=Kevin&employee_lname=Thompson&lat=43.2672&lon=-70.8617](http://ocularwarfare.com/index.html?org_name=Verizon&employee_mode=1&employee_fname=Kevin&employee_lname=Thompson&lat=43.2672&lon=-70.8617)
+## ?? Example Use Cases
 
-### No activity
+- Visualise brute force attacks from SSH, FTP, or web applications
+- Use in cyber security presentations or awareness demos
+- Show off on a large screen in your office!
 
-Just use `norse_mode=1` as a parameter
+## ?? Security Tip
 
-### Using IPew
-
-Feel free to use the hosted version, but we've released IPew under a liberal Creative Commons license, so clone away and use as you see fit, just remember to share your creations (and code) with others.
+If deployed publicly, ensure `.htaccess` and `.htpasswd` are used to protect sensitive routes, but **do not commit them to the repo**.
