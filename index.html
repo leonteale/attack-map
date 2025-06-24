@@ -106,21 +106,36 @@
   text-decoration: underline;
   }
   
+  /* Stats panel */
+  #statsContainer {
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    z-index: 999;
+    font-family: monospace;
+    width: 300px;
+  }
+  
+  #statsToggle {
+    background-color: #111;
+    color: #0f0;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #0f0;
+    border-radius: 6px 6px 0 0;
+    text-align: right;
+  }
+  
   #statsPanel {
-  font-family: monospace;
-  font-size: 12px;
-  position: fixed;
-  top: 60px;
-  left: 10px;
-  width: 300px;
-  max-height: 400px;
-  overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #0f0;
-  border: 1px solid #0f0;
-  padding: 10px;
-  z-index: 999;
-  border-radius: 6px;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #0f0;
+    border: 1px solid #0f0;
+    border-top: none;
+    padding: 10px;
+    border-radius: 0 0 6px 6px;
+    max-height: 400px;
+    overflow-y: auto;
   }
 </style>
 
@@ -154,10 +169,13 @@ function about() {
 
   <center><div id="container1"></div></center>
   <div id="titlediv">Attack Map</div>
-  <div id="statsPanel">
-  <strong>?? Attack Stats</strong><br/>
-  Loading...
-  </div>
+    <div id="statsContainer">
+      <div id="statsToggle"><b>Stats</b> [–]</div>
+      <div id="statsPanel">
+        <strong>Attack Stats</strong><br/>
+        Loading...
+      </div>
+    </div>
   <div id="attackdiv"></div>
   <div id="aboutdiv"><i class="fa fa-question-circle fa-2x" onClick="about();"></i></div>
 
@@ -451,9 +469,28 @@ function about() {
     });
 }
 
-    setInterval(updateStatsPanel, 10_000);
-    updateStatsPanel();
-
+    window.onload = () => {
+      setInterval(updateStatsPanel, 10_000);
+      updateStatsPanel();
+    
+      // Start collapsed
+      document.getElementById('statsPanel').style.display = 'none';
+      document.getElementById('statsToggle').innerHTML = '<b>Stats</b> [+]';
+    
+      document.getElementById('statsToggle').addEventListener('click', () => {
+        const panel = document.getElementById('statsPanel');
+        const toggle = document.getElementById('statsToggle');
+    
+        if (panel.style.display === 'none') {
+          panel.style.display = 'block';
+          toggle.innerHTML = '<b>Stats</b> [-]';
+        } else {
+          panel.style.display = 'none';
+          toggle.innerHTML = '<b>Stats</b> [+]';
+        }
+      });
+    };
+    
     // Handle window resize
     d3.select(window).on('resize', function () { location.reload(); });
 

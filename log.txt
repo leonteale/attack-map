@@ -81,3 +81,4 @@
 [2025-06-24T16:43:17.917Z] 83.24.132.94 (PL/Warsaw) attempted SSH login attempt on port 47136 as user 'root' via ssh
 [2025-06-24T16:51:26.920Z] 80.94.95.116 (RO/Unknown) attempted SSH login attempt on port 29112 as user 'root' via ssh
 [2025-06-24T16:52:15.667Z] 45.88.8.213 (AE/Unknown) attempted SSH login attempt on port 40908 as user 'root' via ssh
+[2025-06-24T17:03:49.418Z] 194.0.234.19 (BE/Unknown) attempted SSH login attempt on port 24922 as user 'root' via ssh
