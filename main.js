@@ -1,8 +1,10 @@
 const WebSocket = require('ws');
 const fs = require('fs');
+require('./statsGenerator');
 const path = require('path');
 const EventEmitter = require('events');
 const emitter = new EventEmitter();
+
 
 const wss = new WebSocket.Server({ port: 8001 });
 console.log('?? WebSocket server listening on ws://0.0.0.0:8001');

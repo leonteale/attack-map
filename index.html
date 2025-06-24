@@ -105,6 +105,23 @@
   color: #f00;
   text-decoration: underline;
   }
+  
+  #statsPanel {
+  font-family: monospace;
+  font-size: 12px;
+  position: fixed;
+  top: 60px;
+  left: 10px;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #0f0;
+  border: 1px solid #0f0;
+  padding: 10px;
+  z-index: 999;
+  border-radius: 6px;
+  }
 </style>
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -137,6 +154,10 @@ function about() {
 
   <center><div id="container1"></div></center>
   <div id="titlediv">Attack Map</div>
+  <div id="statsPanel">
+  <strong>?? Attack Stats</strong><br/>
+  Loading...
+  </div>
   <div id="attackdiv"></div>
   <div id="aboutdiv"><i class="fa fa-question-circle fa-2x" onClick="about();"></i></div>
 
@@ -407,6 +428,31 @@ function about() {
         popup.style.display = 'none';
       }
     });
+
+    // stats panel
+    function updateStatsPanel() {
+  fetch('stats.json')
+    .then(res => res.json())
+    .then(data => {
+      const getTop = arr => (arr.length > 0 ? `${arr[0][0]}: ${arr[0][1]}` : 'None');
+
+      const html = `
+        <strong>Attack Stats</strong><br/>
+        <u>All-time Top</u><br/>
+        <b>Country:</b><br/>${getTop(data.allTime.country)}<br/>
+        <b>IP:</b><br/>${getTop(data.allTime.ip)}<br/>
+        <b>Service:</b><br/>${getTop(data.allTime.service)}<br/><hr>
+        <u>Today Top</u><br/>
+        <b>Country:</b><br/>${getTop(data.today.country)}<br/>
+        <b>IP:</b><br/>${getTop(data.today.ip)}<br/>
+        <b>Service:</b><br/>${getTop(data.today.service)}
+      `;
+      document.getElementById('statsPanel').innerHTML = html;
+    });
+}
+
+    setInterval(updateStatsPanel, 10_000);
+    updateStatsPanel();
 
     // Handle window resize
     d3.select(window).on('resize', function () { location.reload(); });
