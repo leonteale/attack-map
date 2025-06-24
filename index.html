@@ -222,6 +222,7 @@
     var hits = FixedQueue(7, []);
     var boom = FixedQueue(7, []);
     var centers = [];
+    var centersLoaded = false;
 
     // Initialize Datamap
     var map = new Datamap({
@@ -249,6 +250,7 @@
     // Load country centroids asynchronously
     d3.tsv("country_centroids_primary.csv", function (data) {
       centers = data;
+      centersLoaded = true;
     });
 
 
@@ -265,7 +267,7 @@
     
       // Apply animated dash
       setTimeout(() => {
-        d3.selectAll('.datamaps-arc').each(function (d, i) {
+        d3.selectAll('.datamaps-arc').each(function (d) {
           const path = d3.select(this);
           const totalLength = this.getTotalLength();
     
@@ -275,9 +277,8 @@
             .style('animation', 'dashMove 2s linear infinite');
     
           // Apply custom colour from hits[]
-          const arc = hits[i];
-          if (arc && arc.strokeColor) {
-            path.style('stroke', arc.strokeColor);
+          if (d && d.strokeColor) {
+            path.style('stroke', d.strokeColor);
           }
         });
       }, 10);
@@ -329,7 +330,11 @@
       });
 
       // Wait for centers to load
-      if (!centers.length) return;
+      if (!centersLoaded) {
+        // Wait and retry in 100ms
+        setTimeout(() => ws.onmessage(event), 100);
+        return;
+      }
 
       // Find origin data for arcs
       const originData = centers.find(c => c.FIPS10.toUpperCase() === data.origin.toUpperCase());
