@@ -218,9 +218,9 @@
     FixedQueue.splice = FixedQueue.wrapMethod("splice", FixedQueue.trimTail);
     FixedQueue.unshift = FixedQueue.wrapMethod("unshift", FixedQueue.trimTail);
 
-    var attacks = FixedQueue(7, []);
-    var hits = FixedQueue(7, []);
-    var boom = FixedQueue(7, []);
+    var attacks = FixedQueue(10, []);
+    var hits = FixedQueue(10, []);
+    var boom = FixedQueue(10, []);
     var centers = [];
     var centersLoaded = false;
 
@@ -260,6 +260,8 @@
     //
     
     function draw() {
+    d3.selectAll('.datamaps-arc').remove();
+    d3.selectAll('.datamaps-bubble').remove();
       map.arc(hits, {
         strokeWidth: 2,
         arcSharpness: 1
@@ -337,9 +339,18 @@
       }
 
       // Find origin data for arcs
-      const originData = centers.find(c => c.FIPS10.toUpperCase() === data.origin.toUpperCase());
-      if (!originData) return;
-
+      const originCode = (data.origin || '').toUpperCase();
+      
+      const originData = centers.find(c =>
+        (c.FIPS10 && c.FIPS10.toUpperCase() === originCode) ||
+        (c.ISO3136 && c.ISO3136.toUpperCase() === originCode)
+      );
+      
+      if (!originData) {
+        console.warn("No centroid found for:", originCode);
+        return;
+      }
+      
       // For demo, fixed destination at Blackpool (lat/lon)
       const destLat = 53.814;
       const destLong = -3.055;
@@ -377,6 +388,11 @@
         data.dest + " " +
         "<span style='color:steelblue'>(" + data.type + ")</span><br/>"
       );
+      // Keep only last 10 log lines
+      const lines = $('#attackdiv').html().split('<br>');
+      if (lines.length > 10) {
+        $('#attackdiv').html(lines.slice(-10).join('<br>'));
+      }
       $('#attackdiv').animate({ scrollTop: $('#attackdiv').prop("scrollHeight") }, 500);
 
       draw();
