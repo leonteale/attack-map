@@ -1,0 +1,25 @@
+{
+  "name": "iPew-Attack-Map",
+  "version": "1.0.0",
+  "description": "[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)",
+  "main": "jquery.simplemodal-1.4.4.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/secretchip/iPew-Attack-Map.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/secretchip/iPew-Attack-Map/issues"
+  },
+  "homepage": "https://github.com/secretchip/iPew-Attack-Map#readme",
+  "dependencies": {
+    "geoip-lite": "^1.4.10",
+    "tail": "^2.2.6",
+    "ws": "^8.18.2"
+  }
+}

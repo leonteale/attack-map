@@ -1,0 +1,5 @@
+# This is to listen to live events from the logs
+node wsSender.js
+
+#seperte isntance run this to host the web page:
+python3 -m http.server 4000
