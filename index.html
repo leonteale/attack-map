@@ -107,13 +107,15 @@
   }
   
   /* Stats panel */
+  
   #statsContainer {
     position: fixed;
     top: 60px;
     left: 10px;
     z-index: 999;
     font-family: monospace;
-    width: 300px;
+    border: 1px solid transparent;
+    transition: width 0.2s ease;
   }
   
   #statsToggle {
@@ -123,7 +125,9 @@
     cursor: pointer;
     border: 1px solid #0f0;
     border-radius: 6px 6px 0 0;
-    text-align: right;
+    text-align: left;
+    width: 100%; /* make it match the full container width */
+    box-sizing: border-box; /* include padding in the width */
   }
   
   #statsPanel {
@@ -136,6 +140,7 @@
     border-radius: 0 0 6px 6px;
     max-height: 400px;
     overflow-y: auto;
+    display: block;
   }
 </style>
 
@@ -473,20 +478,25 @@ function about() {
       setInterval(updateStatsPanel, 10_000);
       updateStatsPanel();
     
-      // Start collapsed
+      // Set initial collapsed state
       document.getElementById('statsPanel').style.display = 'none';
-      document.getElementById('statsToggle').innerHTML = '<b>Stats</b> [+]';
+      document.getElementById('statsToggle').textContent = 'Stats [+]';
+      document.getElementById('statsContainer').style.width = 'auto';
     
+      // Toggle functionality
       document.getElementById('statsToggle').addEventListener('click', () => {
         const panel = document.getElementById('statsPanel');
         const toggle = document.getElementById('statsToggle');
+        const container = document.getElementById('statsContainer');
     
         if (panel.style.display === 'none') {
           panel.style.display = 'block';
-          toggle.innerHTML = '<b>Stats</b> [-]';
+          toggle.textContent = 'Stats [-]';
+          container.style.width = 'auto';
         } else {
           panel.style.display = 'none';
-          toggle.innerHTML = '<b>Stats</b> [+]';
+          toggle.textContent = 'Stats [+]';
+          container.style.width = 'auto';
         }
       });
     };
