@@ -83,3 +83,4 @@
 [2025-06-24T16:52:15.667Z] 45.88.8.213 (AE/Unknown) attempted SSH login attempt on port 40908 as user 'root' via ssh
 [2025-06-24T17:03:49.418Z] 194.0.234.19 (BE/Unknown) attempted SSH login attempt on port 24922 as user 'root' via ssh
 [2025-06-24T17:11:13.668Z] 45.88.8.213 (AE/Unknown) attempted SSH login attempt on port 54952 as user 'root' via ssh
+[2025-06-24T17:25:40.667Z] 185.156.73.234 (ZA/Unknown) attempted SSH login attempt on port 34982 as user 'root' via ssh
